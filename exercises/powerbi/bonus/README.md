@@ -56,23 +56,35 @@ Or add a rule about specific DAX patterns your team uses.
 
 ### 3. Prepare the semantic model for audit
 
-Open [../data/sales_data.SemanticModel/definition/tables/sales_sample.tmdl](../data/sales_data.SemanticModel/definition/tables/sales_sample.tmdl).
+Open the PBIP project in Power BI Desktop: [Sales_sample.pbip](Sales_sample.pbip)
 
-This file contains all the measures you created in exercises 01 and 02:
-- Exercise 01 measures (Total Quantity, Orders by Region, Average Order Value, etc.)
-- Exercise 02 measures (Total Revenue, YTD Revenue, Product Rank, etc.)
+> ⚠️ **Before opening in Power BI Desktop**, you must update the Power Query source path to point to `sales_sample.csv` on your computer.
+>
+> Open [sales_sample.tmdl](Sales_sample.SemanticModel/definition/tables/sales_sample.tmdl) and find the `File.Contents(...)` line in the partition query. Replace the path with the actual location where you saved the file, e.g.:
+> ```
+> File.Contents("C:\your\path\to\sales_sample.csv")
+> ```
 
-**Review the measures** — remember which ones you completed vs left as BLANK().
+The semantic model contains measures that intentionally violate best practices:
+- Measures with poor names (`rev`, `X`, `avg`)
+- Division without DIVIDE() (division by zero risk)
+- Missing formatStrings and documentation
+- Repeated calculations without VAR
+- Hard-coded filter values
+
+You can also open the underlying TMDL file to see the raw definitions:
+[sales_sample.tmdl](Sales_sample.SemanticModel/definition/tables/sales_sample.tmdl)
 
 ### 4. Attach the skill and run the audit
 
 Open Copilot Chat and attach your audit skill:
 
 1. Type `#file` and select `audit_my_semantic_model.prompt.md`
-2. Then ask:
+2. Also attach the semantic model file: type `#file` and select `exercises/powerbi/bonus/Sales_sample.SemanticModel/definition/tables/sales_sample.tmdl`
+3. Then ask:
 
 ```
-Audit all DAX measures in ../data/sales_data.SemanticModel/definition/tables/sales_sample.tmdl
+Audit all DAX measures in the attached sales_sample.tmdl file
 and generate a comprehensive audit report.
 
 Save the audit report to exercises/powerbi/bonus/audit_report.md
@@ -100,25 +112,17 @@ The report should contain sections like:
 
 **Read through the findings.** Do they match what you know about the measures?
 
-### 6. (Optional) Update the audit with timestamp
 
-If you want to track audits over time, rename the file:
 
-```powershell
-Move-Item audit_report.md "audit_report_$(Get-Date -Format 'yyyy-MM-dd').md"
-```
+### 6. (Optional) Fix the issues
 
-This creates a permanent record with today's date.
-
-### 7. (Optional) Fix the issues
-
-Based on the audit findings, go fix the critical issues!
+Based on the audit findings, go fix the critical issues! Use Copilot to do this. 
 
 For example, if the audit flagged measures using `/` instead of DIVIDE:
-1. Open [sales_sample.tmdl](../data/sales_data.SemanticModel/definition/tables/sales_sample.tmdl)
-2. Find the flagged measure
+1. Open [sales_sample.tmdl](Sales_sample.SemanticModel/definition/tables/sales_sample.tmdl)
+2. Find the flagged measure (e.g., `X`, `avg`, `GrowthPct`)
 3. Replace `/` with `DIVIDE()` with proper error handling
-4. Save the file
+4. Save the file and re-open the `.pbip` in Power BI Desktop
 5. **Re-run the audit** to verify the fix
 
 You can iterate: audit → fix → audit → fix until you achieve a 🟢 Good rating!
@@ -167,20 +171,6 @@ Ask Copilot (with the skill attached):
 Create a compliance matrix showing which measures pass/fail each audit category
 ```
 
-### Challenge 4: Track improvements over time
-1. Run the initial audit (already done in step 4)
-2. Fix 3-5 critical issues in the sales_sample.tmdl file
-3. Ask Copilot: 
-   ```
-   Re-audit ../data/sales_data.SemanticModel/definition/tables/sales_sample.tmdl
-   and save to exercises/powerbi/bonus/audit_report_improved.md
-   ```
-4. Compare the reports:
-   ```
-   Compare audit_report.md with audit_report_improved.md and summarize improvements
-   ```
-
----
 
 ---
 

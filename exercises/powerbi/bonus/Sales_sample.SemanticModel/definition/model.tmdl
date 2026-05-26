@@ -12,7 +12,7 @@ annotation __PBI_TimeIntelligenceEnabled = 1
 
 annotation PBIDesktopVersion = 2.130.930.0 (24.06)
 
-annotation PBI_ProTooling = ["DevMode","MCP-PBIModeling"]
+annotation PBI_ProTooling = ["DevMode","MCP-PBIModeling","TMDL-Extension"]
 
 ref table sales_sample
 ref table DateTableTemplate_09afacbb-0ba4-4bad-a418-fe089d27d25f

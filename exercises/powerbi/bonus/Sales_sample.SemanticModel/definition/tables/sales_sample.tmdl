@@ -109,7 +109,7 @@ table sales_sample
 		mode: import
 		source =
 				let
-				    Source = Csv.Document(File.Contents("C:\Repoer\Bouvet\copilot-introduction\data\sales_sample.csv"),[Delimiter=",", Columns=9, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    Source = Csv.Document(File.Contents("C:\copilot-introduction\exercises\powerbi\bonus\sales_sample.csv"),[Delimiter=",", Columns=9, Encoding=1252, QuoteStyle=QuoteStyle.None]),
 				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
 				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"order_id", type text}, {"customer_id", type text}, {"customer_name", type text}, {"product", type text}, {"category", type text}, {"quantity", Int64.Type}, {"unit_price", type text}, {"order_date", type date}, {"region", type text}})
 				in
